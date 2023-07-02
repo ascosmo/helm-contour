@@ -437,7 +437,7 @@ ingress:
   extraTls: []
   secrets: []
   extraRules: []
-
+#
 metrics:
   serviceMonitor:
     namespace: ""
