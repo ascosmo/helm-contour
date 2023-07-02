@@ -1,0 +1,463 @@
+---
+
+## repository github
+## https://github.com/bitnami/charts/blob/main/bitnami/contour/values.yaml
+
+global:
+  imageRegistry: ""
+  imagePullSecrets:
+  storageClass: ""
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+namespaceOverride: ""
+
+kubeVersion: ""
+
+extraDeploy: []
+
+commonLabels: {}
+
+commonAnnotations: {}
+
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+existingConfigMap: ""
+
+configInline: ##  This is configmap
+  disablePermitInsecure: false
+  tls:
+    fallback-certificate: {}
+  accesslog-format: envoy
+
+contour:
+  enabled: true
+  image:
+    registry: vcp.ocir.io
+    repository: grfrp6rtsznm/ericsson-dev-billing/ghcr.io/projectcontour/contour
+    tag: 1.25.0-debian-11-r13
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets:
+    - name: ocisecret
+    debug: false
+  replicaCount: 1
+  priorityClassName: ""
+  schedulerName: ""
+  terminationGracePeriodSeconds: ""
+  topologySpreadConstraints: []
+  containerPorts:
+    xds: 8001
+    metrics: 8000
+  hostAliases: []
+  updateStrategy: {}
+  extraArgs: []
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  manageCRDs: true
+  envoyServiceNamespace: ""
+  envoyServiceName: ""
+  leaderElectionResourceName: ""
+  ingressStatusAddress: ""
+  podAffinityPreset: ""
+  podAntiAffinityPreset: soft
+  podLabels: {}
+  lifecycleHooks: {}
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  nodeAffinityPreset:
+    type: ""
+    key: ""
+    values: []
+  command: []
+  args: []
+  affinity: {}
+  nodeSelector: {}
+  tolerations:
+  - key: nodepool
+    operator: Equal
+    value: sfppdev
+    effect: NoSchedule
+  podAnnotations: {}
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  certgen:
+    serviceAccount:
+      create: true
+      name: ""
+      automountServiceAccountToken: true
+      annotations: {}
+    certificateLifetime: 365
+  tlsExistingSecret: ""
+  service:
+    type: ClusterIP
+    ports:
+      xds: 8001
+      metrics: 8000
+    nodePorts:
+      xds: ""
+    clusterIP: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    loadBalancerClass: ""
+    externalTrafficPolicy: Cluster
+    annotations: {}
+    extraPorts: []
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+  initContainers: []
+  sidecars: []
+  extraVolumes: []
+  extraVolumeMounts: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  ingressClass: ## This is IngressClass
+    name: ""
+    create: true
+    default: true
+  debug: false
+  logFormat: text
+  kubernetesDebug: 0
+  rootNamespaces: ""
+  overloadManager:
+    enabled: false
+    maxHeapBytes: "2147483648"
+
+envoy:
+  enabled: true
+  image:
+    registry: vcp.ocir.io
+## image: docker.io/bitnami/envoy:1.26.2-debian-11-r4
+    repository: grfrp6rtsznm/ericsson-dev-billing/ghcr.io/projectcontour/envoy
+    tag: 1.26.2-debian-11-r4
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets:
+    - name: ocisecret
+  priorityClassName: ""
+  schedulerName: ""
+  topologySpreadConstraints: []
+  extraArgs: []
+  hostAliases: []
+  resources:
+    limits:
+      cpu: 100m
+      memory: 25Mi
+    requests:
+      cpu: 50m
+      memory: 10Mi
+  command: []
+  args: []
+  shutdownManager:
+    extraArgs: []
+    port: "8090"
+    enabled: true
+    resources:
+      limits:
+        cpu: 10m
+        memory: 16Mi
+      requests:
+        cpu: 5m
+        memory: 10Mi
+  kind: daemonset
+  replicaCount: 1
+  lifecycleHooks: {}
+  updateStrategy:
+    type: RollingUpdate
+  minReadySeconds: 0
+  revisionHistoryLimit: 10
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
+  podAffinityPreset: ""
+  podAntiAffinityPreset: ""
+  nodeAffinityPreset:
+    type: ""
+    key: ""
+    values: []
+  affinity: {}
+  nodeSelector: {}
+  tolerations:
+  - key: nodepool
+    operator: Equal
+    value: sfppdev
+    effect: NoSchedule
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 0
+    sysctls: []
+    enabled: false
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  hostNetwork: false
+  dnsPolicy: ClusterFirst
+  tlsExistingSecret: ""
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  livenessProbe:
+    enabled: true
+    port: 8002
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    port: 8002
+    initialDelaySeconds: 10
+    periodSeconds: 3
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  startupProbe:
+    enabled: false
+    port: 8002
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  terminationGracePeriodSeconds: 300
+  logLevel: info
+  service:
+    name: ""
+    targetPorts:
+      http: http
+      https: https
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    labels: {}
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    loadBalancerClass: ""
+    ipFamilyPolicy: ""
+    annotations: {}
+    ports:
+      http: 80
+      https: 443
+    nodePorts:
+      http: ""
+      https: ""
+    extraPorts: []
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+  useHostPort: true
+  useHostIP: false
+  hostPorts:
+    http: 80
+    https: 443
+    metrics: 8002
+  hostIPs:
+    http: 127.0.0.1
+    https: 127.0.0.1
+    metrics: 127.0.0.1
+  containerPorts:
+    http: 8080
+    https: 8443
+    metrics: 8002
+  initContainers: []
+  sidecars: []
+  extraVolumes: []
+  extraVolumeMounts: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+
+defaultBackend:
+  enabled: false
+  image:
+    registry: vcp.ocir.io
+## image: docker.io/bitnami/nginx:1.25.1-debian-11-r1
+    repository: grfrp6rtsznm/ericsson-dev-billing/ghcr.io/projectcontour/nginx
+    tag: 1.25.1-debian-11-r1
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets:
+    - name: ocisecret
+  extraArgs: {}
+  lifecycleHooks: {}
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraVolumes: []
+  extraVolumeMounts: []
+  initContainers: []
+  sidecars: []
+  containerPorts:
+    http: 8001
+  updateStrategy: {}
+  command: []
+  args: []
+  hostAliases: []
+  replicaCount: 1
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  podLabels: {}
+  podAnnotations: {}
+  priorityClassName: ""
+  schedulerName: ""
+  terminationGracePeriodSeconds: 60
+  topologySpreadConstraints: []
+  podAffinityPreset: ""
+  podAntiAffinityPreset: soft
+  nodeAffinityPreset:
+    type: ""
+    key: ""
+    values: []
+  affinity: {}
+  nodeSelector: {}
+  tolerations:
+  - key: nodepool
+    operator: Equal
+    value: sfppdev
+    effect: NoSchedule
+  service:
+    type: ClusterIP
+    ports:
+      http: 80
+    annotations: {}
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+ingress:
+  enabled: false
+  apiVersion: ""
+  certManager: false
+  annotations: {}
+  hostname: contour.local
+  path: /
+  rulesOverride: []
+  selfSigned: false
+  ingressClassName: ""
+  extraPaths: []
+  tls: false
+  pathType: ImplementationSpecific
+  extraHosts: []
+  extraTls: []
+  secrets: []
+  extraRules: []
+
+metrics:
+  serviceMonitor:
+    namespace: ""
+    enabled: false
+    jobLabel: "app.kubernetes.io/name"
+    interval: ""
+    metricRelabelings: []
+    relabelings: []
+    honorLabels: false
+    scrapeTimeout: ""
+    selector: {}
+    labels: {}
+  prometheusRule:
+    enabled: false
+    namespace: ""
+    additionalLabels: {}
+    rules: []
+
+rbac:
+  create: true
+  rules: []
+
+tlsExistingSecret: ""
